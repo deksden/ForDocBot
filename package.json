@@ -1,0 +1,15 @@
+{
+  "name": "fordocbot",
+  "version": "0.0.1",
+  "description": "ForDocBot ",
+  "main": "app.js",
+  "dependencies": {
+    "telebot": "^1.0.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
