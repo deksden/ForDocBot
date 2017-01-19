@@ -1,7 +1,8 @@
 'use strict';
 
-const TeleBot = require('telebot');
-const bot = new TeleBot('309827121:AAEQzgetqCKOZ_wEd8ui8wCToF92jlOi4vs');
+const TeleBot = require('telebot')
+require('dotenv-safe').load()
+const bot = new TeleBot( process.env.TELEGRAM_TOKEN )
 
 
 // Great API for this bot
@@ -43,6 +44,8 @@ bot.on(['/kitty', '/kittygif'], function(msg) {
   let promise;
   let id = msg.chat.id;
   let cmd = msg.text.split(' ')[0];
+
+  bot.sendMessage( id, "Replying: ...")
 
   // Photo or gif?
   if (cmd == '/kitty') {
@@ -99,6 +102,32 @@ bot.on('inlineQuery', msg => {
 
 });
 
+
+bot.on('/time', msg => {
+
+    return bot.sendMessage(msg.from.id, 'Getting time...').then(re => {
+        // Start updating message
+        updateTime(msg.from.id, re.result.message_id);
+    });
+
+});
+
+function updateTime(chatId, messageId) {
+
+    // Update every second
+    setInterval(x => {
+        bot.editText(
+            { chatId, messageId }, `<b>Current time:</b> ${ time() }`,
+            { parse: 'html' }
+        ).catch(error => console.log('Error:', error));
+    }, 1000);
+
+}
+
+// Get current time
+function time() {
+    return new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, '$1');
+}
 
 // Start getting updates
 bot.connect();

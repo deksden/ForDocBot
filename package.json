@@ -1,15 +1,19 @@
 {
   "name": "fordocbot",
   "version": "0.0.1",
-  "description": "ForDocBot ",
+  "description": "ForDocBot - Telegram bot for work with Documents",
   "main": "app.js",
+  "repository": "https://github.com/deksden/ForDocBot.git",
   "dependencies": {
-    "telebot": "^1.0.6"
+    "telebot": "^1.0.6",
+    "dotenv-safe": "^4.0.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+  },
   "scripts": {
+    "run": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "(c) deksden",
+  "license": "GPL-3.0"
 }
