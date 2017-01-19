@@ -5,11 +5,12 @@
   "main": "app.js",
   "repository": "https://github.com/deksden/ForDocBot.git",
   "dependencies": {
-    "telebot": "^1.0.6",
-    "dotenv-safe": "^4.0.3"
+    "docxtemplater": "^3.0.2",
+    "dotenv-safe": "^4.0.3",
+    "jszip": "^2.6.1",
+    "telebot": "^1.0.6"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "scripts": {
     "run": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"

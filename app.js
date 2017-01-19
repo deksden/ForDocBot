@@ -5,6 +5,11 @@ require('dotenv-safe').load()
 const bot = new TeleBot( process.env.TELEGRAM_TOKEN )
 
 
+const fs = require('fs')
+const Docxtemplater = require('docxtemplater')
+const JSZip = require('jszip')
+
+
 // Great API for this bot
 const API = 'https://thecatapi.com/api/images/get?format=src&type=';
 
@@ -17,11 +22,13 @@ const markup = bot.keyboard([
 bot.on('text', function(msg) {
   console.log(`[text] ${ msg.chat.id } ${ msg.text } from ${ msg.from.first_name}`)
   console.log( msg )
+
 });
 
 // On command "start" or "help"
 bot.on(['/start', '/help'], function(msg) {
 
+  console.log( 'About' )
   return bot.sendMessage(msg.chat.id,
     '😺 Use commands: /kitty, /kittygif and /about', { markup }
   );
@@ -64,6 +71,43 @@ bot.on(['/kitty', '/kittygif'], function(msg) {
   });
 
 });
+
+
+// On command "/doc"
+bot.on('/doc', function(msg) {
+
+  console.log( 'Start processing' )
+
+  bot.sendMessage(msg.chat.id, 'Here is template:');
+  console.log( process.cwd() )
+
+  //Load the docx template file as a binary
+  let content = fs.readFileSync(process.cwd() + "/template.docx", "binary");
+  let zip = new JSZip(content);
+  let doc=new Docxtemplater().loadZip(zip)
+
+
+  //set the templateVariables
+  doc.setData({
+    "name": 'Denis',
+    "opt": "1234"
+  });
+
+  //apply them (replace all occurences of {first_name} by Hipp, ...)
+  doc.render();
+
+  let buf = doc.getZip().generate({type:"nodebuffer"});
+
+  //fs.writeFileSync(__dirname+"/output.docx",buf);
+  let promise = bot.sendDocument( msg.chat.id, buf, { fileName: 'processed_template.docx'})
+
+  return promise.catch(error => {
+    console.log('[error]', error);
+    // Send an error
+    bot.sendMessage(id, `😿 An error ${ error } occurred, try again.`);
+  });
+});
+
 
 // On inline query
 bot.on('inlineQuery', msg => {
